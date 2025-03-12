@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 12-03-2025 a las 15:04:48
+-- Tiempo de generación: 12-03-2025 a las 16:21:00
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 8.1.10
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `agrosoft`
 --
+CREATE DATABASE IF NOT EXISTS `agrosoft` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `agrosoft`;
 
 -- --------------------------------------------------------
 
@@ -27,6 +29,7 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `actividad`
 --
 
+DROP TABLE IF EXISTS `actividad`;
 CREATE TABLE `actividad` (
   `id_actividad` int NOT NULL,
   `nombre_actividad` varchar(50) DEFAULT NULL,
@@ -38,7 +41,7 @@ CREATE TABLE `actividad` (
 --
 
 INSERT INTO `actividad` (`id_actividad`, `nombre_actividad`, `descripcion`) VALUES
-(1, 'abono', 'abonar cultiva'),
+(1, 'abono para florecer ', 'abonar cultiva'),
 (2, 'recoger cafe', 'coleccionar cafe'),
 (3, 'Reforestación comunitaria', 'Actividad de reforestación en el parque central');
 
@@ -48,6 +51,7 @@ INSERT INTO `actividad` (`id_actividad`, `nombre_actividad`, `descripcion`) VALU
 -- Estructura de tabla para la tabla `asignacion_actividad`
 --
 
+DROP TABLE IF EXISTS `asignacion_actividad`;
 CREATE TABLE `asignacion_actividad` (
   `id_asignacion_actividad` int NOT NULL,
   `fecha` date DEFAULT NULL,
@@ -60,7 +64,7 @@ CREATE TABLE `asignacion_actividad` (
 --
 
 INSERT INTO `asignacion_actividad` (`id_asignacion_actividad`, `fecha`, `fk_id_actividad`, `fk_identificacion`) VALUES
-(3, '2025-03-10', 3, 1234567),
+(3, '2025-03-10', 2, 1234567),
 (4, '2025-03-10', 2, 1234567);
 
 -- --------------------------------------------------------
@@ -69,6 +73,7 @@ INSERT INTO `asignacion_actividad` (`id_asignacion_actividad`, `fecha`, `fk_id_a
 -- Estructura de tabla para la tabla `calendario_lunar`
 --
 
+DROP TABLE IF EXISTS `calendario_lunar`;
 CREATE TABLE `calendario_lunar` (
   `id_calendario_lunar` int NOT NULL,
   `fecha` date DEFAULT NULL,
@@ -81,7 +86,7 @@ CREATE TABLE `calendario_lunar` (
 --
 
 INSERT INTO `calendario_lunar` (`id_calendario_lunar`, `fecha`, `descripcion_evento`, `evento`) VALUES
-(1, '2025-09-07', 'Eclipse lunar total visible en América', 'Eclipse Lunar');
+(1, '2025-09-07', 'Eclipse lunar total visible en latino america', 'Eclipse Lunar');
 
 -- --------------------------------------------------------
 
@@ -89,6 +94,7 @@ INSERT INTO `calendario_lunar` (`id_calendario_lunar`, `fecha`, `descripcion_eve
 -- Estructura de tabla para la tabla `control_fitosanitario`
 --
 
+DROP TABLE IF EXISTS `control_fitosanitario`;
 CREATE TABLE `control_fitosanitario` (
   `id_control_fitosanitario` int NOT NULL,
   `fecha_control` date DEFAULT NULL,
@@ -109,6 +115,7 @@ INSERT INTO `control_fitosanitario` (`id_control_fitosanitario`, `fecha_control`
 -- Estructura de tabla para la tabla `control_usa_insumo`
 --
 
+DROP TABLE IF EXISTS `control_usa_insumo`;
 CREATE TABLE `control_usa_insumo` (
   `id_control_usa_insumo` int NOT NULL,
   `fk_id_insumo` int DEFAULT NULL,
@@ -121,7 +128,7 @@ CREATE TABLE `control_usa_insumo` (
 --
 
 INSERT INTO `control_usa_insumo` (`id_control_usa_insumo`, `fk_id_insumo`, `fk_id_control_fitosanitario`, `cantidad`) VALUES
-(1, 1, 1, 11);
+(1, 1, 1, 10);
 
 -- --------------------------------------------------------
 
@@ -129,6 +136,7 @@ INSERT INTO `control_usa_insumo` (`id_control_usa_insumo`, `fk_id_insumo`, `fk_i
 -- Estructura de tabla para la tabla `cultivo`
 --
 
+DROP TABLE IF EXISTS `cultivo`;
 CREATE TABLE `cultivo` (
   `id_cultivo` int NOT NULL,
   `fecha_plantacion` date NOT NULL,
@@ -153,6 +161,7 @@ INSERT INTO `cultivo` (`id_cultivo`, `fecha_plantacion`, `nombre_cultivo`, `desc
 -- Estructura de tabla para la tabla `desarrollan`
 --
 
+DROP TABLE IF EXISTS `desarrollan`;
 CREATE TABLE `desarrollan` (
   `id_desarrollan` int NOT NULL,
   `fk_id_cultivo` int DEFAULT NULL,
@@ -175,6 +184,7 @@ INSERT INTO `desarrollan` (`id_desarrollan`, `fk_id_cultivo`, `fk_id_pea`) VALUE
 -- Estructura de tabla para la tabla `eras`
 --
 
+DROP TABLE IF EXISTS `eras`;
 CREATE TABLE `eras` (
   `id_eras` int NOT NULL,
   `descripcion` varchar(50) DEFAULT NULL,
@@ -195,6 +205,7 @@ INSERT INTO `eras` (`id_eras`, `descripcion`, `fk_id_lote`) VALUES
 -- Estructura de tabla para la tabla `especie`
 --
 
+DROP TABLE IF EXISTS `especie`;
 CREATE TABLE `especie` (
   `id_especie` int NOT NULL,
   `nombre_comun` varchar(50) DEFAULT NULL,
@@ -217,6 +228,7 @@ INSERT INTO `especie` (`id_especie`, `nombre_comun`, `nombre_cientifico`, `descr
 -- Estructura de tabla para la tabla `genera`
 --
 
+DROP TABLE IF EXISTS `genera`;
 CREATE TABLE `genera` (
   `id_genera` int NOT NULL,
   `fk_id_cultivo` int DEFAULT NULL,
@@ -238,6 +250,7 @@ INSERT INTO `genera` (`id_genera`, `fk_id_cultivo`, `fk_id_produccion`) VALUES
 -- Estructura de tabla para la tabla `herramientas`
 --
 
+DROP TABLE IF EXISTS `herramientas`;
 CREATE TABLE `herramientas` (
   `id_herramienta` int NOT NULL,
   `nombre_h` varchar(50) DEFAULT NULL,
@@ -259,6 +272,7 @@ INSERT INTO `herramientas` (`id_herramienta`, `nombre_h`, `fecha_prestamo`, `est
 -- Estructura de tabla para la tabla `insumos`
 --
 
+DROP TABLE IF EXISTS `insumos`;
 CREATE TABLE `insumos` (
   `id_insumo` int NOT NULL,
   `nombre` varchar(50) DEFAULT NULL,
@@ -281,6 +295,7 @@ INSERT INTO `insumos` (`id_insumo`, `nombre`, `tipo`, `precio_unidad`, `cantidad
 -- Estructura de tabla para la tabla `lote`
 --
 
+DROP TABLE IF EXISTS `lote`;
 CREATE TABLE `lote` (
   `id_lote` int NOT NULL,
   `dimension` int DEFAULT NULL,
@@ -303,6 +318,7 @@ INSERT INTO `lote` (`id_lote`, `dimension`, `nombre_lote`, `fk_id_ubicacion`, `e
 -- Estructura de tabla para la tabla `mide`
 --
 
+DROP TABLE IF EXISTS `mide`;
 CREATE TABLE `mide` (
   `id_mide` int NOT NULL,
   `fk_id_sensor` int DEFAULT NULL,
@@ -322,6 +338,7 @@ INSERT INTO `mide` (`id_mide`, `fk_id_sensor`, `fk_id_era`) VALUES
 -- Estructura de tabla para la tabla `notificacion`
 --
 
+DROP TABLE IF EXISTS `notificacion`;
 CREATE TABLE `notificacion` (
   `id_notificacion` int NOT NULL,
   `titulo` varchar(50) DEFAULT NULL,
@@ -342,6 +359,7 @@ INSERT INTO `notificacion` (`id_notificacion`, `titulo`, `mensaje`, `fk_id_progr
 -- Estructura de tabla para la tabla `pea`
 --
 
+DROP TABLE IF EXISTS `pea`;
 CREATE TABLE `pea` (
   `id_pea` int NOT NULL,
   `nombre` varchar(50) DEFAULT NULL,
@@ -362,6 +380,7 @@ INSERT INTO `pea` (`id_pea`, `nombre`, `descripcion`) VALUES
 -- Estructura de tabla para la tabla `plantacion`
 --
 
+DROP TABLE IF EXISTS `plantacion`;
 CREATE TABLE `plantacion` (
   `id_plantacion` int NOT NULL,
   `fk_id_cultivo` int DEFAULT NULL,
@@ -382,6 +401,7 @@ INSERT INTO `plantacion` (`id_plantacion`, `fk_id_cultivo`, `fk_id_era`) VALUES
 -- Estructura de tabla para la tabla `produccion`
 --
 
+DROP TABLE IF EXISTS `produccion`;
 CREATE TABLE `produccion` (
   `id_produccion` int NOT NULL,
   `fk_id_cultivo` int DEFAULT NULL,
@@ -407,6 +427,7 @@ INSERT INTO `produccion` (`id_produccion`, `fk_id_cultivo`, `cantidad_producida`
 -- Estructura de tabla para la tabla `programacion`
 --
 
+DROP TABLE IF EXISTS `programacion`;
 CREATE TABLE `programacion` (
   `id_programacion` int NOT NULL,
   `estado` varchar(50) DEFAULT NULL,
@@ -429,6 +450,7 @@ INSERT INTO `programacion` (`id_programacion`, `estado`, `fecha_programada`, `du
 -- Estructura de tabla para la tabla `realiza`
 --
 
+DROP TABLE IF EXISTS `realiza`;
 CREATE TABLE `realiza` (
   `id_realiza` int NOT NULL,
   `fk_id_cultivo` int DEFAULT NULL,
@@ -449,6 +471,7 @@ INSERT INTO `realiza` (`id_realiza`, `fk_id_cultivo`, `fk_id_actividad`) VALUES
 -- Estructura de tabla para la tabla `requiere`
 --
 
+DROP TABLE IF EXISTS `requiere`;
 CREATE TABLE `requiere` (
   `id_requiere` int NOT NULL,
   `fk_id_herramienta` int DEFAULT NULL,
@@ -468,6 +491,7 @@ INSERT INTO `requiere` (`id_requiere`, `fk_id_herramienta`, `fk_id_asignacion_ac
 -- Estructura de tabla para la tabla `residuos`
 --
 
+DROP TABLE IF EXISTS `residuos`;
 CREATE TABLE `residuos` (
   `id_residuo` int NOT NULL,
   `nombre` varchar(50) DEFAULT NULL,
@@ -491,6 +515,7 @@ INSERT INTO `residuos` (`id_residuo`, `nombre`, `fecha`, `descripcion`, `fk_id_t
 -- Estructura de tabla para la tabla `rol`
 --
 
+DROP TABLE IF EXISTS `rol`;
 CREATE TABLE `rol` (
   `id_rol` int NOT NULL,
   `nombre_rol` enum('admin','aprendiz','pasante','instructor') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -513,6 +538,7 @@ INSERT INTO `rol` (`id_rol`, `nombre_rol`, `fecha_creacion`) VALUES
 -- Estructura de tabla para la tabla `semilleros`
 --
 
+DROP TABLE IF EXISTS `semilleros`;
 CREATE TABLE `semilleros` (
   `id_semillero` int NOT NULL,
   `nombre_semilla` varchar(50) DEFAULT NULL,
@@ -536,6 +562,7 @@ INSERT INTO `semilleros` (`id_semillero`, `nombre_semilla`, `fecha_siembra`, `fe
 -- Estructura de tabla para la tabla `sensores`
 --
 
+DROP TABLE IF EXISTS `sensores`;
 CREATE TABLE `sensores` (
   `id_sensor` int NOT NULL,
   `nombre_sensor` varchar(50) DEFAULT NULL,
@@ -559,6 +586,7 @@ INSERT INTO `sensores` (`id_sensor`, `nombre_sensor`, `tipo_sensor`, `unidad_med
 -- Estructura de tabla para la tabla `tipo_cultivo`
 --
 
+DROP TABLE IF EXISTS `tipo_cultivo`;
 CREATE TABLE `tipo_cultivo` (
   `id_tipo_cultivo` int NOT NULL,
   `nombre` varchar(50) DEFAULT NULL,
@@ -580,6 +608,7 @@ INSERT INTO `tipo_cultivo` (`id_tipo_cultivo`, `nombre`, `descripcion`) VALUES
 -- Estructura de tabla para la tabla `tipo_residuos`
 --
 
+DROP TABLE IF EXISTS `tipo_residuos`;
 CREATE TABLE `tipo_residuos` (
   `id_tipo_residuo` int NOT NULL,
   `nombre_residuo` varchar(50) DEFAULT NULL,
@@ -600,6 +629,7 @@ INSERT INTO `tipo_residuos` (`id_tipo_residuo`, `nombre_residuo`, `descripcion`)
 -- Estructura de tabla para la tabla `ubicacion`
 --
 
+DROP TABLE IF EXISTS `ubicacion`;
 CREATE TABLE `ubicacion` (
   `id_ubicacion` int NOT NULL,
   `latitud` decimal(9,6) DEFAULT NULL,
@@ -620,6 +650,7 @@ INSERT INTO `ubicacion` (`id_ubicacion`, `latitud`, `longitud`) VALUES
 -- Estructura de tabla para la tabla `usuarios`
 --
 
+DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios` (
   `identificacion` bigint NOT NULL,
   `nombre` varchar(50) DEFAULT NULL,
@@ -643,6 +674,7 @@ INSERT INTO `usuarios` (`identificacion`, `nombre`, `contrasena`, `email`, `fk_i
 -- Estructura de tabla para la tabla `utiliza`
 --
 
+DROP TABLE IF EXISTS `utiliza`;
 CREATE TABLE `utiliza` (
   `id_utiliza` int NOT NULL,
   `fk_id_insumo` int DEFAULT NULL,
@@ -662,6 +694,7 @@ INSERT INTO `utiliza` (`id_utiliza`, `fk_id_insumo`, `fk_id_asignacion_actividad
 -- Estructura de tabla para la tabla `venta`
 --
 
+DROP TABLE IF EXISTS `venta`;
 CREATE TABLE `venta` (
   `id_venta` int NOT NULL,
   `fk_id_produccion` int DEFAULT NULL,

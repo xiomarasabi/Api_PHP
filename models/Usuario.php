@@ -94,6 +94,24 @@ public function delete($id) {
     $stmt->bindParam(":identificacion", $this->identificacion);
     return $stmt->execute();
 }
+public function login($email, $contrasena) {
+    $query = "SELECT identificacion, nombre, contrasena, email, fk_id_rol FROM " . $this->table . " WHERE LOWER(email) = LOWER(:email) LIMIT 1";
+    $stmt = $this->connect->prepare($query);
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+
+    if ($stmt->rowCount() > 0) {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (password_verify($contrasena, $row['contrasena'])) {
+            $this->identificacion = $row['identificacion'];
+            $this->nombre = $row['nombre'];
+            $this->email = $row['email'];
+            $this->fk_id_rol = $row['fk_id_rol'];
+            return true;
+        }
+    }
+    return false;
+}
 
     
 }

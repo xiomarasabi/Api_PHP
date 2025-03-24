@@ -17,6 +17,16 @@ class ControlUsaInsumoController {
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode(["status" => "200", "data" => $data]);
     }
+    public function getById($id) {
+        $stmt = $this->controlUsaInsumo->getById($id);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            echo json_encode(["status" => "200", "data" => $data]);
+        } else {
+            echo json_encode(["status" => "404", "message" => "Era no encontrada"]);
+        }
+    }
 
     public function create() {
         $data = json_decode(file_get_contents("php://input"), true);
@@ -50,6 +60,20 @@ class ControlUsaInsumoController {
 
         if ($this->controlUsaInsumo->update()) {
             echo json_encode(["status" => "200", "message" => "Registro actualizado"]);
+        } else {
+            echo json_encode(["status" => "Error", "message" => "Error al actualizar"]);
+        }
+    }
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (empty($data)) {
+            echo json_encode(["status" => "Error", "message" => "No hay datos para actualizar"]);
+            return;
+        }
+
+        if ($this->control_usa_insumo->patch($id, $data)) {
+            echo json_encode(["status" => "200", "message" => "Registro actualizado parcialmente"]);
         } else {
             echo json_encode(["status" => "Error", "message" => "Error al actualizar"]);
         }

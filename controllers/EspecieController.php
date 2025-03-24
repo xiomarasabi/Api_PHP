@@ -17,6 +17,16 @@ class EspecieController {
         $especies = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode(["status" => "200", "data" => $especies]);
     }
+    public function getById($id) {
+        $stmt = $this->especie->getById($id);
+        $especie = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if ($especie) {
+            echo json_encode(["status" => "200", "data" => $especie]);
+        } else {
+            echo json_encode(["status" => "Error", "message" => "No se encontró la especie"]);
+        }
+    }
 
     public function create() {
         $data = json_decode(file_get_contents("php://input"), true);
@@ -54,6 +64,15 @@ class EspecieController {
             echo json_encode(["status" => "200", "message" => "Especie actualizada"]);
         } else {
             echo json_encode(["status" => "Error", "message" => "Error al actualizar"]);
+        }
+    }
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+    
+        if ($this->especie->patch($id, $data)) {
+            echo json_encode(["status" => "200", "message" => "Especie actualizada parcialmente"]);
+        } else {
+            echo json_encode(["status" => "Error", "message" => "Error al actualizar parcialmente"]);
         }
     }
 

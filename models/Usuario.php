@@ -31,6 +31,43 @@ class Usuario {
         $stmt->bindParam(":fk_id_rol", $this->fk_id_rol);
         return $stmt->execute();
     }
+    public function getById($identificacion) {
+        $query = "SELECT usuarios.*, Rol.nombre_rol 
+                  FROM " . $this->table . " 
+                  INNER JOIN Rol ON usuarios.fk_id_rol = Rol.id_rol 
+                  WHERE identificacion = :identificacion LIMIT 1";
+
+        $stmt = $this->connect->prepare($query);
+        $stmt->bindParam(":identificacion", $identificacion, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function patch($identificacion, $data) {
+        if (empty($data)) {
+            return false;
+        }
+
+        $fields = [];
+        if (isset($data['contrasena']) && !empty($data['contrasena'])) {
+            $data['contrasena'] = password_hash($data['contrasena'], PASSWORD_BCRYPT);
+        }
+
+        foreach ($data as $key => $value) {
+            $fields[] = "$key = :$key";
+        }
+
+        $query = "UPDATE " . $this->table . " SET " . implode(", ", $fields) . " WHERE identificacion = :identificacion";
+        $stmt = $this->connect->prepare($query);
+
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(":$key", $value);
+        }
+
+        $stmt->bindParam(":identificacion", $identificacion, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
 
     public function update() {
         $query = "UPDATE usuarios SET nombre = :nombre, email = :email, fk_id_rol = :fk_id_rol " .

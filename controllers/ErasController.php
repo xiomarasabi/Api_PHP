@@ -17,6 +17,16 @@ class ErasController {
         $eras = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode(["status" => "200", "data" => $eras]);
     }
+    public function getById($id) {
+        $stmt = $this->eras->getById($id);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            echo json_encode(["status" => "200", "data" => $data]);
+        } else {
+            echo json_encode(["status" => "404", "message" => "Era no encontrada"]);
+        }
+    }
 
     public function create() {
         $data = json_decode(file_get_contents("php://input"), true);
@@ -52,6 +62,15 @@ class ErasController {
             echo json_encode(["status" => "200", "message" => "Era actualizada"]);
         } else {
             echo json_encode(["status" => "Error", "message" => "Error al actualizar"]);
+        }
+    }
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($this->eras->patch($id, $data)) {
+            echo json_encode(["status" => "200", "message" => "Era actualizada parcialmente"]);
+        } else {
+            echo json_encode(["status" => "Error", "message" => "Error al actualizar parcialmente"]);
         }
     }
 

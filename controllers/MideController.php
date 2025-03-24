@@ -34,6 +34,28 @@ class MideController {
             echo json_encode(["status" => "Error", "message" => "Error al crear"]);
         }
     }
+    public function getById($id) {
+        $mide = $this->mide->getById($id);
+        if ($mide) {
+            echo json_encode(["status" => "200", "data" => $mide]);
+        } else {
+            echo json_encode(["status" => "404", "message" => "Registro no encontrado"]);
+        }
+    }
+
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data || empty($data)) {
+            echo json_encode(["status" => "400", "message" => "Datos incompletos"]);
+            return;
+        }
+
+        if ($this->mide->patch($id, $data)) {
+            echo json_encode(["status" => "200", "message" => "Registro actualizado correctamente"]);
+        } else {
+            echo json_encode(["status" => "500", "message" => "Error al actualizar el registro"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

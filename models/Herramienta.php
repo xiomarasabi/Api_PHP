@@ -30,6 +30,48 @@ class Herramienta {
 
         return $stmt->execute();
     }
+    public function getById($id) {
+        $query = "SELECT * FROM herramientas WHERE id_herramienta = :id";
+        $stmt = $this->connect->prepare($query);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
+    
+    public function patch($id, $data) {
+        $query = "UPDATE herramientas SET ";
+        $fields = [];
+    
+        if (isset($data['nombre_h'])) {
+            $fields[] = "nombre_h = :nombre_h";
+        }
+        if (isset($data['fecha_prestamo'])) {
+            $fields[] = "fecha_prestamo = :fecha_prestamo";
+        }
+        if (isset($data['estado'])) {
+            $fields[] = "estado = :estado";
+        }
+    
+        if (empty($fields)) {
+            return false;
+        }
+    
+        $query .= implode(", ", $fields) . " WHERE id_herramienta = :id";
+        $stmt = $this->connect->prepare($query);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    
+        if (isset($data['nombre_h'])) {
+            $stmt->bindParam(":nombre_h", $data['nombre_h'], PDO::PARAM_STR);
+        }
+        if (isset($data['fecha_prestamo'])) {
+            $stmt->bindParam(":fecha_prestamo", $data['fecha_prestamo'], PDO::PARAM_STR);
+        }
+        if (isset($data['estado'])) {
+            $stmt->bindParam(":estado", $data['estado'], PDO::PARAM_STR);
+        }
+    
+        return $stmt->execute();
+    }
 
     public function update() {
         $query = "UPDATE " . $this->table . " 

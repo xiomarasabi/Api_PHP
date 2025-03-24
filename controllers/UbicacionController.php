@@ -35,6 +35,20 @@ class UbicacionController {
             echo json_encode(["status" => "Error", "message" => "Error al crear la ubicación"]);
         }
     }
+    public function getById($id) {
+        $result = $this->ubicacion->getById($id);
+        echo json_encode($result);
+    }
+
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($this->ubicacion->patch($id, $data)) {
+            echo json_encode(["message" => "Ubicación actualizada correctamente"]);
+        } else {
+            echo json_encode(["error" => "Error al actualizar la ubicación"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

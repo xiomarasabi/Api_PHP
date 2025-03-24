@@ -40,6 +40,24 @@ class ProduccionController {
             echo json_encode(["status" => "Error", "message" => "Error al registrar producción"]);
         }
     }
+    public function getById($id) {
+        $result = $this->produccion->getById($id);
+        if ($result) {
+            echo json_encode(["success" => true, "data" => $result]);
+        } else {
+            echo json_encode(["success" => false, "message" => "Producción no encontrada"]);
+        }
+    }
+
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($this->produccion->patch($id, $data)) {
+            echo json_encode(["success" => true, "message" => "Producción actualizada correctamente"]);
+        } else {
+            echo json_encode(["success" => false, "message" => "Error al actualizar producción"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

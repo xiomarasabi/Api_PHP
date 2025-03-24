@@ -31,6 +31,40 @@ class Utiliza {
 
         return $stmt->execute();
     }
+    public function getById($id_utiliza) {
+        $query = "SELECT utiliza.*, insumos.nombre, insumos.tipo, insumos.precio_unidad, 
+                         insumos.cantidad, insumos.unidad_medida 
+                  FROM " . $this->table . " 
+                  INNER JOIN insumos ON utiliza.fk_id_insumo = insumos.id_insumo
+                  WHERE utiliza.id_utiliza = :id_utiliza LIMIT 1";
+
+        $stmt = $this->connect->prepare($query);
+        $stmt->bindParam(":id_utiliza", $id_utiliza, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function patch($id_utiliza, $data) {
+        if (empty($data)) {
+            return false;
+        }
+
+        $fields = [];
+        foreach ($data as $key => $value) {
+            $fields[] = "$key = :$key";
+        }
+
+        $query = "UPDATE " . $this->table . " SET " . implode(", ", $fields) . " WHERE id_utiliza = :id_utiliza";
+        $stmt = $this->connect->prepare($query);
+
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(":$key", $value);
+        }
+
+        $stmt->bindParam(":id_utiliza", $id_utiliza, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
 
     public function update() {
         $query = "UPDATE " . $this->table . " 

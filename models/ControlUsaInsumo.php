@@ -18,6 +18,13 @@ class ControlUsaInsumo {
         $stmt->execute();
         return $stmt;
     }
+    public function getById($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE id_control_usa_insumo = :id";
+        $stmt = $this->connect->prepare($query);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
 
     public function create() {
         $query = "INSERT INTO " . $this->table . " (fk_id_insumo, fk_id_control_fitosanitario, cantidad) 
@@ -45,6 +52,25 @@ class ControlUsaInsumo {
         $stmt->bindParam(":id_control_usa_insumo", $this->id_control_usa_insumo);
 
         return $stmt->execute();
+    }
+    public function patch($id, $data) {
+        $setClause = [];
+        $params = [];
+
+        foreach ($data as $key => $value) {
+            $setClause[] = "$key = :$key";
+            $params[":$key"] = $value;
+        }
+
+        if (empty($setClause)) {
+            return false;
+        }
+
+        $query = "UPDATE " . $this->table . " SET " . implode(", ", $setClause) . " WHERE id_calendario_lunar = :id";
+        $stmt = $this->connect->prepare($query);
+        $params[":id"] = $id;
+
+        return $stmt->execute($params);
     }
 
     public function delete($id) {

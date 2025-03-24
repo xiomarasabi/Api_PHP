@@ -34,6 +34,20 @@ class TipoResiduoController {
             echo json_encode(["status" => "Error", "message" => "Error al crear"]);
         }
     }
+    public function getById($id) {
+        $result = $this->tipoResiduo->getById($id);
+        echo json_encode($result);
+    }
+
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($this->tipoResiduo->patch($id, $data)) {
+            echo json_encode(["message" => "Tipo de residuo actualizado correctamente"]);
+        } else {
+            echo json_encode(["error" => "Error al actualizar el tipo de residuo"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

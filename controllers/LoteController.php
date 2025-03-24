@@ -37,6 +37,28 @@ class LoteController {
             echo json_encode(["status" => "Error", "message" => "Error al crear el lote"]);
         }
     }
+    public function getById($id) {
+        $lote = $this->lote->getById($id);
+        if ($lote) {
+            echo json_encode(["status" => "200", "data" => $lote]);
+        } else {
+            echo json_encode(["status" => "404", "message" => "Lote no encontrado"]);
+        }
+    }
+
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data || empty($data)) {
+            echo json_encode(["status" => "400", "message" => "Datos incompletos"]);
+            return;
+        }
+
+        if ($this->lote->patch($id, $data)) {
+            echo json_encode(["status" => "200", "message" => "Lote actualizado correctamente"]);
+        } else {
+            echo json_encode(["status" => "500", "message" => "Error al actualizar el lote"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

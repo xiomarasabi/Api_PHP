@@ -34,6 +34,26 @@ class GeneraController {
             echo json_encode(["status" => "Error", "message" => "Error al crear registro"]);
         }
     }
+    public function getById($id) {
+        $stmt = $this->genera->getById($id);
+        $genera = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if ($genera) {
+            echo json_encode(["status" => "200", "data" => $genera]);
+        } else {
+            echo json_encode(["status" => "Error", "message" => "No se encontró el registro"]);
+        }
+    }
+    
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+    
+        if ($this->genera->patch($id, $data)) {
+            echo json_encode(["status" => "200", "message" => "Registro actualizado parcialmente"]);
+        } else {
+            echo json_encode(["status" => "Error", "message" => "Error al actualizar parcialmente"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

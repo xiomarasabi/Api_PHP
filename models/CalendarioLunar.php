@@ -18,6 +18,13 @@ class CalendarioLunar {
         $stmt->execute();
         return $stmt;
     }
+    public function getById($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE id_calendario_lunar = :id";
+        $stmt = $this->connect->prepare($query);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
 
     public function create() {
         $query = "INSERT INTO " . $this->table . " (descripcion_evento, evento, fecha) VALUES (:descripcion_evento, :evento, :fecha)";
@@ -38,6 +45,25 @@ class CalendarioLunar {
         $stmt->bindParam(":evento", $this->evento);
         $stmt->bindParam(":fecha", $this->fecha);
         return $stmt->execute();
+    }
+    public function patch($id, $data) {
+        $setClause = [];
+        $params = [];
+
+        foreach ($data as $key => $value) {
+            $setClause[] = "$key = :$key";
+            $params[":$key"] = $value;
+        }
+
+        if (empty($setClause)) {
+            return false;
+        }
+
+        $query = "UPDATE " . $this->table . " SET " . implode(", ", $setClause) . " WHERE id_calendario_lunar = :id";
+        $stmt = $this->connect->prepare($query);
+        $params[":id"] = $id;
+
+        return $stmt->execute($params);
     }
     
     public function delete($id) {

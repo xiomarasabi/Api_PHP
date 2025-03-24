@@ -38,6 +38,30 @@ class Produccion {
 
         return $stmt->execute();
     }
+    public function getById($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE id_produccion = :id_produccion";
+        $stmt = $this->connect->prepare($query);
+        $stmt->bindParam(":id_produccion", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function patch($id, $data) {
+        $fields = [];
+        foreach ($data as $key => $value) {
+            $fields[] = "$key = :$key";
+        }
+
+        $query = "UPDATE " . $this->table . " SET " . implode(", ", $fields) . " WHERE id_produccion = :id_produccion";
+        $stmt = $this->connect->prepare($query);
+        
+        foreach ($data as $key => &$value) {
+            $stmt->bindParam(":$key", $value);
+        }
+
+        $stmt->bindParam(":id_produccion", $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 
     public function update() {
         $query = "UPDATE " . $this->table . " 

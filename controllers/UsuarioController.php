@@ -38,6 +38,20 @@ class UsuarioController {
             echo json_encode(["status" => "Error", "message" => "Error al crear"]);
         }
     }
+    public function getById($identificacion) {
+        $result = $this->usuario->getById($identificacion);
+        echo json_encode($result);
+    }
+
+    public function patch($identificacion) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($this->usuario->patch($identificacion, $data)) {
+            echo json_encode(["message" => "Usuario actualizado correctamente"]);
+        } else {
+            echo json_encode(["error" => "Error al actualizar el usuario"]);
+        }
+    }
 
     
     public function update($id) {

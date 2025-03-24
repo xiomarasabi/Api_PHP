@@ -38,6 +38,20 @@ class SensorController {
             echo json_encode(["status" => "Error", "message" => "Error al crear"]);
         }
     }
+    public function getById($id) {
+        $result = $this->sensor->getById($id);
+        echo json_encode($result);
+    }
+
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($this->sensor->patch($id, $data)) {
+            echo json_encode(["message" => "Sensor actualizado correctamente"]);
+        } else {
+            echo json_encode(["error" => "Error al actualizar el sensor"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

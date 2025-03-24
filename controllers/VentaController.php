@@ -37,6 +37,20 @@ class VentaController {
             echo json_encode(["status" => "Error", "message" => "Error al registrar venta"]);
         }
     }
+    public function getById($id_venta) {
+        $result = $this->venta->getById($id_venta);
+        echo json_encode($result);
+    }
+
+    public function patch($id_venta) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($this->venta->patch($id_venta, $data)) {
+            echo json_encode(["message" => "Registro actualizado correctamente"]);
+        } else {
+            echo json_encode(["error" => "Error al actualizar el registro"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

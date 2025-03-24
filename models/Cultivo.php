@@ -23,6 +23,13 @@ class Cultivo {
         $stmt->execute();
         return $stmt;
     }
+    public function getById($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE id_cultivo = :id";
+        $stmt = $this->connect->prepare($query);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
 
     public function create() {
         $query = "INSERT INTO " . $this->table . " (fecha_plantacion, nombre_cultivo, descripcion, fk_id_especie, fk_id_semillero) 
@@ -54,6 +61,22 @@ class Cultivo {
         $stmt->bindParam(":descripcion", $this->descripcion);
         $stmt->bindParam(":fk_id_especie", $this->fk_id_especie);
         $stmt->bindParam(":fk_id_semillero", $this->fk_id_semillero);
+
+        return $stmt->execute();
+    }
+    public function patch($id, $data) {
+        $fields = [];
+        foreach ($data as $key => $value) {
+            $fields[] = "$key = :$key";
+        }
+
+        $query = "UPDATE " . $this->table . " SET " . implode(", ", $fields) . " WHERE id_cultivo = :id";
+        $stmt = $this->connect->prepare($query);
+
+        foreach ($data as $key => &$value) {
+            $stmt->bindParam(":$key", $value);
+        }
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
 
         return $stmt->execute();
     }

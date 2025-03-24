@@ -17,6 +17,14 @@ class InsumosController {
         $insumos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode(["status" => "200", "data" => $insumos]);
     }
+    public function getById($id) {
+        $insumo = $this->insumos->getById($id);
+        if ($insumo) {
+            echo json_encode(["status" => "200", "data" => $insumo]);
+        } else {
+            echo json_encode(["status" => "404", "message" => "Insumo no encontrado"]);
+        }
+    }
 
     public function create() {
         $data = json_decode(file_get_contents("php://input"), true);
@@ -38,8 +46,14 @@ class InsumosController {
         }
 
     }
-
-
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if ($this->insumos->patch($id, $data)) {
+            echo json_encode(["status" => "200", "message" => "Insumo actualizado parcialmente"]);
+        } else {
+            echo json_encode(["status" => "Error", "message" => "Error al actualizar parcialmente"]);
+        }
+    }
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);
 

@@ -17,6 +17,13 @@ class Eras {
         $stmt->execute();
         return $stmt;
     }
+    public function getById($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE id_eras = :id";
+        $stmt = $this->connect->prepare($query);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
 
     public function create() {
         $query = "INSERT INTO " . $this->table . " (descripcion, fk_id_lote) 
@@ -39,6 +46,34 @@ class Eras {
         $stmt->bindParam(":fk_id_lote", $this->fk_id_lote);
         $stmt->bindParam(":id_eras", $this->id_eras);
 
+        return $stmt->execute();
+    }
+    public function patch($id, $data) {
+        $query = "UPDATE " . $this->table . " SET ";
+        $fields = [];
+
+        if (isset($data['descripcion'])) {
+            $fields[] = "descripcion = :descripcion";
+        }
+        if (isset($data['fk_id_lote'])) {
+            $fields[] = "fk_id_lote = :fk_id_lote";
+        }
+
+        if (empty($fields)) {
+            return false;
+        }
+
+        $query .= implode(", ", $fields) . " WHERE id_eras = :id";
+        $stmt = $this->connect->prepare($query);
+
+        if (isset($data['descripcion'])) {
+            $stmt->bindParam(":descripcion", $data['descripcion']);
+        }
+        if (isset($data['fk_id_lote'])) {
+            $stmt->bindParam(":fk_id_lote", $data['fk_id_lote']);
+        }
+
+        $stmt->bindParam(":id", $id);
         return $stmt->execute();
     }
 

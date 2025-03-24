@@ -35,6 +35,20 @@ class UtilizaController {
             echo json_encode(["message" => "Error al crear el registro"]);
         }
     }
+    public function getById($id_utiliza) {
+        $result = $this->utiliza->getById($id_utiliza);
+        echo json_encode($result);
+    }
+
+    public function patch($id_utiliza) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($this->utiliza->patch($id_utiliza, $data)) {
+            echo json_encode(["message" => "Registro actualizado correctamente"]);
+        } else {
+            echo json_encode(["error" => "Error al actualizar el registro"]);
+        }
+    }
 
     
     public function update($id) {

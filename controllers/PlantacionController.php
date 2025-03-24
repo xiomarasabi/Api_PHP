@@ -35,6 +35,28 @@ class PlantacionController {
             echo json_encode(["status" => "Error", "message" => "Error al crear la plantación"]);
         }
     }
+    public function getById($id) {
+        $plantacion = $this->plantacion->getById($id);
+        if ($plantacion) {
+            echo json_encode(["status" => "200", "data" => $plantacion]);
+        } else {
+            echo json_encode(["status" => "404", "message" => "Plantación no encontrada"]);
+        }
+    }
+
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data || empty($data)) {
+            echo json_encode(["status" => "400", "message" => "Datos incompletos"]);
+            return;
+        }
+
+        if ($this->plantacion->patch($id, $data)) {
+            echo json_encode(["status" => "200", "message" => "Plantación actualizada correctamente"]);
+        } else {
+            echo json_encode(["status" => "500", "message" => "Error al actualizar la plantación"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

@@ -26,13 +26,25 @@ $controller = new $resource();
 
 switch ($method) {
     case "GET":
-        $controller->getAll();
+        if ($id) {
+            $controller->getById($id);
+        } else {
+            $controller->getAll();
+        }
         break;
     case "POST":
         $controller->create();
         break;
     case "PUT":
         $id ? $controller->update($id) : errorResponse("ID requerido para actualizar");
+        break;
+    case "PATCH":
+        if ($id) {
+            $controller->patch($id);
+        } else {
+            echo json_encode(["status" => "Error", "message" => "ID requerido"]);
+            http_response_code(400);
+        }
         break;
     case "DELETE":
         $id ? $controller->delete($id) : errorResponse("ID requerido para eliminar");

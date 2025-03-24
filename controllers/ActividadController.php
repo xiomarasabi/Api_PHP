@@ -17,6 +17,16 @@ class ActividadController {
         $actividad = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode(["status" => "200", "data" => $actividad]);
     }
+    public function getById($id) {
+        $stmt = $this->actividad->getById($id);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            echo json_encode(["status" => "200", "data" => $data]);
+        } else {
+            echo json_encode(["status" => "404", "message" => "Era no encontrada"]);
+        }
+    }
 
     public function create() {
         $data = json_decode(file_get_contents("php://input"), true);
@@ -52,7 +62,40 @@ class ActividadController {
         } else {
             echo json_encode(["status" => "Error", "message" => "Error al actualizar"]);
         }
-    }    
+    }  
+    
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (empty($data)) {
+            echo json_encode(["status" => "Error", "message" => "No hay datos para actualizar"]);
+            http_response_code(400);
+            return;
+        }
+
+        $this->actividad->id_actividad = $id;
+
+        
+        $stmt = $this->actividad->getById($id);
+        $actividadExistente = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$actividadExistente) {
+            echo json_encode(["status" => "Error", "message" => "Actividad no encontrada"]);
+            http_response_code(404);
+            return;
+        }
+
+        // Asignar solo los valores proporcionados
+        $this->actividad->descripcion = $data['descripcion'] ?? $actividadExistente['descripcion'];
+        $this->actividad->nombre_actividad = $data['nombre_actividad'] ?? $actividadExistente['nombre_actividad'];
+
+        if ($this->actividad->update()) {
+            echo json_encode(["status" => "200", "message" => "Actividad actualizada parcialmente"]);
+        } else {
+            echo json_encode(["status" => "Error", "message" => "Error al actualizar"]);
+        }
+    }
+ 
 
     public function delete($id) {
         $query = "DELETE FROM actividad WHERE id_actividad = :id";

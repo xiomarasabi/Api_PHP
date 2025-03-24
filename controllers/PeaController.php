@@ -35,6 +35,28 @@ class PeaController {
             echo json_encode(["status" => "Error", "message" => "Error al crear"]);
         }
     }
+    public function getById($id) {
+        $pea = $this->pea->getById($id);
+        if ($pea) {
+            echo json_encode(["status" => "200", "data" => $pea]);
+        } else {
+            echo json_encode(["status" => "404", "message" => "PEA no encontrada"]);
+        }
+    }
+
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data || empty($data)) {
+            echo json_encode(["status" => "400", "message" => "Datos incompletos"]);
+            return;
+        }
+
+        if ($this->pea->patch($id, $data)) {
+            echo json_encode(["status" => "200", "message" => "PEA actualizada correctamente"]);
+        } else {
+            echo json_encode(["status" => "500", "message" => "Error al actualizar la PEA"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

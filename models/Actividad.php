@@ -17,6 +17,13 @@ class Actividad {
         $stmt->execute();
         return $stmt;
     }
+    public function getById($id) {
+        $query = "SELECT * FROM " . $this->table . " WHERE id_actividad = :id";
+        $stmt = $this->connect->prepare($query);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
 
     public function create() {
         $query = "INSERT INTO " . $this->table . " (descripcion, nombre_actividad) VALUES (:descripcion, :nombre_actividad)";
@@ -27,10 +34,9 @@ class Actividad {
     }
 
     public function update() {
-        $query = "UPDATE actividad SET descripcion = :descripcion, nombre_actividad = :nombre_actividad WHERE id_actividad = :id_actividad";
+        $query = "UPDATE " . $this->table . " SET descripcion = :descripcion, nombre_actividad = :nombre_actividad WHERE id_actividad = :id_actividad";
         
         $stmt = $this->connect->prepare($query);
-        
         $stmt->bindParam(":id_actividad", $this->id_actividad, PDO::PARAM_INT);
         $stmt->bindParam(":descripcion", $this->descripcion);
         $stmt->bindParam(":nombre_actividad", $this->nombre_actividad);

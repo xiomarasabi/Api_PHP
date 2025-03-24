@@ -35,6 +35,24 @@ class RealizaController {
             echo json_encode(["status" => "Error", "message" => "Error al crear la relación"]);
         }
     }
+    public function getById($id) {
+        $result = $this->realiza->getById($id); 
+        if ($result) {
+            echo json_encode(["success" => true, "data" => $result]); 
+        } else {
+            echo json_encode(["success" => false, "message" => "Registro no encontrado"]);
+        }
+    }
+
+
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true); 
+        if ($this->realiza->patch($id, $data)) {
+            echo json_encode(["success" => true, "message" => "Registro actualizado correctamente"]);
+        } else {
+            echo json_encode(["success" => false, "message" => "Error al actualizar el registro"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

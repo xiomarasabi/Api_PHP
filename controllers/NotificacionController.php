@@ -35,6 +35,28 @@ class NotificacionController {
             echo json_encode(["status" => "Error", "message" => "Error al crear la notificación"]);
         }
     }
+    public function getById($id) {
+        $notificacion = $this->notificacion->getById($id);
+        if ($notificacion) {
+            echo json_encode(["status" => "200", "data" => $notificacion]);
+        } else {
+            echo json_encode(["status" => "404", "message" => "Notificación no encontrada"]);
+        }
+    }
+
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data || empty($data)) {
+            echo json_encode(["status" => "400", "message" => "Datos incompletos"]);
+            return;
+        }
+
+        if ($this->notificacion->patch($id, $data)) {
+            echo json_encode(["status" => "200", "message" => "Notificación actualizada correctamente"]);
+        } else {
+            echo json_encode(["status" => "500", "message" => "Error al actualizar la notificación"]);
+        }
+    }
 
     public function update($id) {
         $data = json_decode(file_get_contents("php://input"), true);

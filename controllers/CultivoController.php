@@ -17,6 +17,16 @@ class CultivoController {
         $cultivos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode(["status" => "200", "data" => $cultivos]);
     }
+    public function getById($id) {
+        $stmt = $this->cultivo->getById($id);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            echo json_encode(["status" => "200", "data" => $data]);
+        } else {
+            echo json_encode(["status" => "404", "message" => "Era no encontrada"]);
+        }
+    }
 
     public function create() {
         $data = json_decode(file_get_contents("php://input"), true);
@@ -58,6 +68,20 @@ class CultivoController {
             echo json_encode(["status" => "200", "message" => "Cultivo actualizado"]);
         } else {
             echo json_encode(["status" => "Error", "message" => "Error al actualizar el cultivo"]);
+        }
+    }
+    public function patch($id) {
+        $data = json_decode(file_get_contents("php://input"), true);
+    
+        if (empty($data)) {
+            echo json_encode(["status" => "Error", "message" => "No hay datos para actualizar"]);
+            return;
+        }
+    
+        if ($this->cultivo->patch($id, $data)) {
+            echo json_encode(["status" => "200", "message" => "Cultivo actualizado parcialmente"]);
+        } else {
+            echo json_encode(["status" => "Error", "message" => "Error al actualizar"]);
         }
     }
 
